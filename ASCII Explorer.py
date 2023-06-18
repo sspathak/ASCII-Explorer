@@ -21,35 +21,35 @@ def update ():
             looping = False
             pygame.display.quit()
             quit()
-        elif event.type == 2:
-            if event.key==32:
+        elif event.type == pygame.KEYDOWN:
+            if event.key==pygame.K_SPACE:
                 if pause==True:
                     pause=False
                 elif pause==False:
                     pause==True
                     update()
-            elif event.key == 273: #up
+            elif event.key == pygame.K_UP: #up
                 if canjump:
                     global iterate
                     iterate=True
                     rate = -3.5  
                     canjump=False #jump
-            elif event.key == 276:#left
+            elif event.key == pygame.K_LEFT:#left
                 control(["add","l"])
-            elif event.key == 275: #right
+            elif event.key == pygame.K_RIGHT: #right
                 control(["add","r"])
-            elif event.key == 274:
+            elif event.key == pygame.K_DOWN:
                 recover()
 
             else:
-                print event.key
-        elif event.type == 3:
+                print (event.key)
+        elif event.type == pygame.KEYUP:
             global srate
-            if event.key == 275:#right
+            if event.key == pygame.K_RIGHT:#right
                 if srate>0:
                     srate=0
                 control(["remove","r"])
-            elif event.key == 276:#left
+            elif event.key == pygame.K_LEFT:#left
                 if srate<0:
                     srate=0
                 control(["remove","l"])
@@ -71,6 +71,8 @@ def move():
     global rate
     global width
     global srate
+    global itercount
+    global iterate
     if controlstack[-1]=="r" and permitr:
         srate=1
         x=x+int(srate)
@@ -83,9 +85,9 @@ def move():
         rate=rate+0.5 #jump
     else:
         rate=rate+0.5
-        global iterate
+
         iterate=False
-        global itercount
+
         itercount=0
     if rate >=3.5:
         rate = 2.5
@@ -104,7 +106,7 @@ def framePrint (frame):
     stage=" ________________________________________________ \n"
     for i in range(len(frame)):
         stage=stage+frame[i]+"\n"
-    print stage + "\n ________________________________________________ \n"
+    print (stage + "\n ________________________________________________ \n")
 
 
 def track(action):
@@ -120,35 +122,35 @@ def track(action):
         a=tracker.pop()
         return a
 def slowprint(x):
-    print "\n"
+    print ("\n")
     for i in range(len(x)):
         if i+1 != x:
             sys.stdout.write(x[i])
 
             sleep(0.03)
         else:
-            print "a"
+            print ("a")
     sleep(1)
 class character:
     charskin=[["[","*"," "," ","*","]"],["["," ","_","_"," ","]"]]
     def __init__(self):
         pass
     def validate(self):
-        print '''
+        print ('''
 ____ _  _ ___ _  _ ____ _  _ ___ _ ____ ____ ___ _ _  _ ____ 
 |__| |  |  |  |__| |___ |\ |  |  | |    |__|  |  | |\ | | __ 
 |  | |__|  |  |  | |___ | \|  |  | |___ |  |  |  | | \| |__] 
-                                                             ''' + "\n"+ "                "+stringer(character.charskin[0]) + "\n" + "                "+stringer(character.charskin[1])
+                                                             ''' + "\n"+ "                "+stringer(character.charskin[0]) + "\n" + "                "+stringer(character.charskin[1]))
 
         for i in character.charskin:
             for j in i:
                 if j=="M" or j=="." or len(i)!=6:
-                    print j
-                    print'''
+                    print (j)
+                    print('''
                          __      __              
 | |\ | \  /  /\  |    | |  \    /__` |__/ | |\ | 
 | | \|  \/  /~~\ |___ | |__/    .__/ |  \ | | \| 
-                                                 '''
+                                                 ''')
                     sleep(0.5)
                     slowprint ("AVOID USING 'M', '.', OR MORE THAN 6 LETTERS ")
                     slowprint ("SWITCHING TO CHARACTER EDIT MODE. ")
@@ -162,7 +164,7 @@ ____ _  _ ___ _  _ ____ _  _ ___ _ ____ ____ ___ _ _  _ ____
         slowprint("NOW SELECT THE COMMAND WINDOW TO CREATE YOUR CHARACTER SKIN ")
         tempskin=[["[","*"," "," ","*","]"],["["," ","_","_"," ","]"]]
         for i in range(2):
-            tempskin[i]=raw_input("enter 6 ASCII characters of your choice : ")
+            tempskin[i]=input("enter 6 ASCII characters of your choice : ")
         temp=[[],[]]
         for j in range(len(tempskin)):
             for k in tempskin[j]:
@@ -172,7 +174,7 @@ ____ _  _ ___ _  _ ____ _  _ ___ _ ____ ____ ___ _ _  _ ____
         if self.validate():
             slowprint ("SKIN VALIDATED ")
             slowprint("NOW SELECT THE PYGAME WINDOW AND PRESS UP OR DOWN ARROW KEY ")
-            print ""
+            print ("")
             return
 
 
@@ -255,7 +257,7 @@ def collision(frame,x1,y1):
         recover()
     elif ((contact4[x1]==" " and contact4[x1+5]==" ") and (contact2[x1-1]=="M" and contact2[x1+6]=="M") and (contact1[x1]=="M" and contact1[x1+5]=="M")):
         recover()
-        print "thiz is buggy :("
+        print ("thiz is buggy :(")
     elif ((contact1[x1+1]=="M" and contact4[x1+1]=="M")or(contact1[x1+2]=="M" and contact4[x1+2]=="M")or(contact1[x1+3]=="M" and contact4[x1+3]=="M")or(contact1[x1+4]=="M" and contact4[x1+4]=="M")):
         recover()
     elif (( contact3[x1-1]=="M" and contact4[x1+6]==" ") or( contact3[x1+6]=="M" and contact4[x1-1]==" ")) and (contact4[x1]=="M" or contact4[x1+5]=="M"):
@@ -295,8 +297,8 @@ def collision(frame,x1,y1):
 
 def gameoverP():
     sleep(0.5)
-    print "\n \n \n \n \n \n \n \n \n \n "
-    print " _______  _______  __   __  _______    _______  __   __  _______  ______   \n|       ||   _   ||  |_|  ||       |  |       ||  | |  ||       ||    _ |  \n|    ___||  |_|  ||       ||    ___|  |   _   ||  |_|  ||    ___||   | ||  \n|   | __ |       ||       ||   |___   |  | |  ||       ||   |___ |   |_||_ \n|   ||  ||       ||       ||    ___|  |  |_|  ||       ||    ___||    __  |\n|   |_| ||   _   || ||_|| ||   |___   |       | |     | |   |___ |   |  | |\n|_______||__| |__||_|   |_||_______|  |_______|  |___|  |_______||___|  |_|"
+    print ("\n \n \n \n \n \n \n \n \n \n ")
+    print (" _______  _______  __   __  _______    _______  __   __  _______  ______   \n|       ||   _   ||  |_|  ||       |  |       ||  | |  ||       ||    _ |  \n|    ___||  |_|  ||       ||    ___|  |   _   ||  |_|  ||    ___||   | ||  \n|   | __ |       ||       ||   |___   |  | |  ||       ||   |___ |   |_||_ \n|   ||  ||       ||       ||    ___|  |  |_|  ||       ||    ___||    __  |\n|   |_| ||   _   || ||_|| ||   |___   |       | |     | |   |___ |   |  | |\n|_______||__| |__||_|   |_||_______|  |_______|  |___|  |_______||___|  |_|")
     slowprint("\n \n \n \n \n \n \n \n \n \n \n \n \n \n ")
     sleep(1)
     initialize()
@@ -304,10 +306,10 @@ def gameoverP():
     #quit()
 def lvlcompleteP():
     for i in range (15):
-        print "\n"
+        print ("\n")
         sleep(0.2)
         slowprint ("\n \n \n \n \n \n \n \n \n \n ")
-        print '''                   __       ___________    ____  _______  __                     
+        print ('''                   __       ___________    ____  _______  __                     
                   |  |     |   ____\   \  /   / |   ____||  |                    
                   |  |     |  |__   \   \/   /  |  |__   |  |                    
                   |  |     |   __|   \      /   |   __|  |  |                    
@@ -320,11 +322,11 @@ def lvlcompleteP():
 |  |     |  |  |  | |  |\/|  | |   ___/  |  |     |   __|      |  |     |   __|  
 |  `----.|  `--'  | |  |  |  | |  |      |  `----.|  |____     |  |     |  |____ 
  \______| \______/  |__|  |__| | _|      |_______||_______|    |__|     |_______|
-                                                                                 '''
+                                                                                 ''')
         slowprint("\n \n \n \n \n \n \n \n \n \n \n \n \n \n ")
         quit()
     for i in range (15):
-        print "\n"
+        print ("\n")
         sleep(0.2)
         initialize()
         return
@@ -365,6 +367,7 @@ def mainloop():
 
 
 def mainmenu():
+    print("Press Down arrow key")
     global selected
     play2='''
   ___    ___                                                                                     
@@ -431,26 +434,26 @@ def mainmenu():
     while True:
         hear=listen()
         sleep(0.1)
-        if hear==274:
+        if hear==pygame.K_DOWN:
             if selected<4:
                 selected+=1
-        elif hear==273:
+        elif hear==pygame.K_UP:
             if selected>1:
                 selected-=1
-        elif hear==13:
+        elif hear==pygame.K_RETURN:
             return selected
         else:
             continue
-        print "\n"*20
+        print ("\n"*20)
         if selected==1:
-            print play2 +inst1 +charedit1 +exit1
+            print (play2 +inst1 +charedit1 +exit1)
         elif selected==2:
-            print play1 +inst2 +charedit1 +exit1
+            print (play1 +inst2 +charedit1 +exit1)
         elif selected==3:
-            print play1 +inst1 +charedit2 +exit1
+            print (play1 +inst1 +charedit2 +exit1)
         elif selected==4: 
-            print play1 +inst1 +charedit1 +exit2
-        print "\n"*20
+            print (play1 +inst1 +charedit1 +exit2)
+        print ("\n"*20)
 
 
 
@@ -465,6 +468,7 @@ def home():
     global lvlE
     global width
     global ch
+    print("Press Down arrow key")
     x=8
     rate=-1
     y=8
@@ -499,8 +503,8 @@ def listen():
             looping = False
             pygame.display.quit()
             quit()
-        elif event.type == 2:
-            return event.key   
+        elif event.type == pygame.KEYDOWN:
+            return event.key
 
 #main
 
