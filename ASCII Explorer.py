@@ -565,6 +565,7 @@ def initialize():
     tracker=[[8,8,lvlS,lvlE]]*100 #tracks 10 previous coordinates
     skin=character()
 
+
 global controlstack
 global y
 global rate
